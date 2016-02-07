@@ -1,12 +1,12 @@
-# virgin-polymer
-My first polymer app
+# polymer-todo
+Basic polymer-todo style app
 
-Really nothing too special, following the newest Level+ Polymer tutorial on YouTube
+Really nothing special, followed and heavily modified Scotch.io tutorial
 
 # To get up and running:
 
 ```sh
-$ git clone git@github.com:domfarolino/virgin-polymer.git
+$ git clone git@github.com:domfarolino/polymer-tood.git
 $ virtualenv venv
 $ source venv/bin/activate
 $ pip install -r requirements.txt
