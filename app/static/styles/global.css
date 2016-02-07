@@ -1,0 +1,59 @@
+html, body {
+    height: 100%;
+    font-family:RobotoDraft;
+}
+
+/* Custom Typography */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight:100;
+}
+
+/* Custom Layout Semantics */
+.middle {
+    text-align:center;
+}
+
+.padding-light {
+    padding:5px;
+}
+
+.padding-medium {
+    padding:10px;
+}
+
+.padding-heavy {
+    padding:20px;
+}
+/* Custom Typography */
+
+
+footer {
+    padding: 16px;
+}
+
+
+.collapsed-row span {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.round-face {
+    border-radius: calc(100%);
+}
+
+/* Layout Definitions */
+
+#main > #main-list {
+    width:70%;
+}
+
+div#content {
+    width:100%;
+    margin:0 auto;
+}

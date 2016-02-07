@@ -1,0 +1,35 @@
+{
+  "name": "polymer-todo",
+  "authors": [
+    "Dom Farolino <domfarolino@gmail.com>"
+  ],
+  "description": "A very simple polymer todo app following a scotch.io tutorial",
+  "main": "",
+  "moduleType": [],
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.0.0",
+    "paper-checkbox": "polymerelements/paper-checkbox#^1.0.1",
+    "iron-input": "polymerelements/iron-input#^1.0.0",
+    "paper-input": "polymerelements/paper-input#^1.1.5",
+    "paper-drawer-panel": "polymerelements/paper-drawer-panel#^1.0.6",
+    "paper-button": "polymerelements/paper-button#^1.0.11",
+    "paper-fab": "polymerelements/paper-fab#^1.1.2",
+    "paper-menu": "polymerelements/paper-menu#^1.2.2",
+    "iron-icons": "polymerelements/iron-icons#^1.1.3",
+    "paper-item": "polymerelements/paper-item#^1.1.3",
+    "paper-header-panel": "polymerelements/paper-header-panel#^1.1.3",
+    "paper-toolbar": "polymerelements/paper-toolbar#^1.1.4",
+    "paper-icon-button": "polymerelements/paper-icon-button#^1.0.6",
+    "paper-scroll-header-panel": "PolymerElements/paper-scroll-header-panel#^1.0.14",
+    "iron-image": "polymerelements/iron-image#^1.2.2"
+  }
+}

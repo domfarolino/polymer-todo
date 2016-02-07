@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>{% block title %}{% endblock %}</title>
+  
+  {% for file in cssdep %}
+  <link rel="stylesheet" href="{{file}}">
+  {% endfor %}
+
+  <script src="../static/bower_components/webcomponentsjs/webcomponents.js"></script>
+  {% for file in jsdep %}
+    <script src="{{file}}"></script>
+  {% endfor %}
+
+  {% for file in componentdep %}
+    <link rel="import" href="{{file}}">
+  {% endfor %}
+
+</head>
+
+
+</head>
+<body fullbleed unresolved>
+
+<todo-app>
+</todo-app>
+
+  {% block main %}
+  {% endblock %}
+
+</body>
+</html>

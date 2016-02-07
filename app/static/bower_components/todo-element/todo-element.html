@@ -1,0 +1,126 @@
+<!-- Todo app from Scotch IO tutorial (https://scotch.io/tutorials/build-a-real-time-polymer-to-do-app) -->
+<link rel="import" href="../polymer/polymer.html">
+
+<link rel="import" href="../paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../paper-item/paper-item.html">
+<link rel="import" href="../paper-input/paper-input.html">
+<link rel="import" href="../paper-material/paper-material.html">
+<link rel="import" href="../paper-fab/paper-fab.html">
+<link rel="import" href="../iron-icons/iron-icons.html">
+
+
+<dom-module id="todo-element">
+
+  <style>
+    /* CSS rules for your element */
+    .todo {
+      padding: 10px;
+    }
+    
+    paper-checkbox, #clearInput {
+      float: right;
+      margin: 2vh 2vw;
+    }
+    
+    paper-button {
+      background: #ccc;
+    }
+    
+    paper-fab {
+      position: absolute;
+      bottom: 3vh;
+      right: 3vw;
+    }
+    
+    .done {
+      background: green;
+    }
+    
+    .info {
+      font-style: italic;
+      font-size: 14px;
+      color: #696969;
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+    
+    paper-material {
+      background-color: #fff;
+      max-width: 640px;
+      margin: 25px auto;
+      position: relative;
+    }
+    
+    .info span {
+      margin-left: 5px;
+    }
+    
+    paper-input {
+      margin: 0 2vw;
+    }
+
+  </style>
+
+  <template>
+    <paper-material class="todo" elevation="1">
+      <paper-checkbox checked="{{completed}}" hidden="{{editing}}"></paper-checkbox>
+      <paper-icon-button hidden="{{!editing}}" id="clearInput" suffix on-tap="clearInput" icon="clear">
+  </paper-icon-button>
+      <paper-item hidden="{{editing}}" id="task">{{task}}</paper-item>
+      <paper-input hidden="{{!editing}}" id="edit" placeholder="Todo item here" value="{{task}}"></paper-input>
+      <paper-item>Created by: <span>{{user}}</span></paper-item>
+      <paper-item>{{time}}</paper-item>
+      <paper-fab hidden="{{editing}}" icon="create" on-tap="doEdit" mini></paper-fab>
+      <paper-fab hidden="{{!editing}}" icon="done" on-tap="doEdit" mini></paper-fab>
+    </paper-material>
+  </template>
+
+</dom-module>
+
+<script>
+  Polymer({
+    is: 'todo-element',
+    // all properties for element's public API
+    properties: {
+      user: {
+        type: String,
+        value: "Dom Farolino"
+      },
+      rid: {
+        type: Number,
+        value: 0
+      },
+      editing: {
+        type: Boolean,
+        value: false
+      },
+      completed: {
+        type: Boolean,
+        value: false,
+        observer: 'compChanged'
+      },
+      task: {
+        type: String,
+        value: "Something to do"
+      },
+      time: {
+        type: String,
+        value: new Date().toLocaleString()
+      }
+    },
+
+    clearInput: function(e) {
+      this.task = "";
+    },
+    
+    compChanged: function(e) {
+      if(e) {
+        console.log("Comp changed");
+        this.fire('complete', this);
+      }
+    },
+    doEdit: function(e) {
+      (this.editing) ? this.editing = false : this.editing = true;
+    }
+  });
+</script>

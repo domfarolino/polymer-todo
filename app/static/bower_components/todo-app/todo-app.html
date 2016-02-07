@@ -1,0 +1,254 @@
+<!-- Todo app from Scotch IO tutorial (https://scotch.io/tutorials/build-a-real-time-polymer-to-do-app) -->
+<link rel="import" href="../polymer/polymer.html">
+
+<link rel="import" href="../todo-element/todo-element.html">
+<link rel="import" href="../paper-scroll-header-panel/paper-scroll-header-panel.html">
+<link rel="import" href="../paper-toolbar/paper-toolbar.html">
+<link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
+
+<link rel="import" href="../paper-drawer-panel/paper-drawer-panel.html">
+<link rel="import" href="../paper-header-panel/paper-header-panel.html">
+<link rel="import" href="../paper-menu/paper-menu.html">
+<link rel="import" href="../paper-icon-button/paper-icon-button.html">
+
+
+<dom-module id="todo-app">
+
+<style>
+  
+  .list paper-item {
+    border-bottom: 1px solid #dedede;
+    background-color: #fafafa;
+  }
+  
+  #todoEntry {
+    margin: 0 auto 25px auto;
+    max-width: 640px;
+    padding:10px;
+  }
+
+  #todoEntry paper-input {
+    margin: 0 auto;
+    max-width:70%;
+  }
+  
+  paper-material {
+    background-color: #fff;
+    max-width: 640px;
+    width: 95%;
+    margin: 25px auto;
+    position: relative;
+  }
+  
+  paper-fab {
+    position: absolute;
+    bottom: 2vh;
+    right: 2vw;
+  }
+  
+  .task-empty paper-item {
+    text-align: center;
+    padding: 25px;
+    color: #6f6f6f;
+  }
+  
+  #made-with {
+    width:100%;
+    margin:0;
+    position: fixed;
+    bottom: 0;
+    text-align: center;
+  }
+  
+  #made-with img {
+    width: 35%;
+    padding: 10px;
+  }
+
+  paper-scroll-header-panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    /* background for toolbar when it is at its full size */
+    --paper-scroll-header-panel-full-header: {
+      background-image: url(/static/img/bg.jpg);
+      background-color: blue;
+    };
+    /* background for toolbar when it is condensed */
+    --paper-scroll-header-panel-condensed-header: {
+      background-color: #2979FF;
+      background-color: rgb(100, 100, 100);
+    };
+  }
+    
+  paper-toolbar.tall {
+    background-color: transparent;
+  }
+    
+  paper-toolbar.tall .title {
+    font-size: 30px;
+    /*margin-left: 60px;*/
+    -webkit-transform-origin: left center;
+    transform-origin: left center;
+    /* Issue #15 */
+    isolation: isolate;
+  }
+    
+  paper-toolbar.tall iron-icon {
+    margin: 0 8px;
+  }
+
+  paper-toolbar#navheader{
+    background: tomato;
+    background-size: cover;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    background-image: url(https://lh4.googleusercontent.com/-w2lE2xrVbIA/UZf22RVPOJI/AAAAAAAARFw/cP8P6UIrLHk/w1600-h900/default_cover_photo_5_google_plus.jpg);
+
+    -webkit-filter: grayscale(100%);
+    filter: grayscale(100%);
+  }
+
+  .content {
+    padding:20px;
+    border-left: 2px solid #ececec;
+  }
+  </style>
+
+  <template>
+    <paper-drawer-panel>
+      <!-- Begin drawer -->
+      <paper-header-panel mode="scroll" drawer>
+        <paper-toolbar id="navheader" class="tall">
+          <img class="middle profile" hidden>
+          <div class="bottom layout vertical">
+            <span>Dom Farolino</span>
+            <span>domfarolino@gmail.com</span>
+          </div>
+        </paper-toolbar>
+        <!-- Begin side bar content -->
+        <paper-menu class="list">
+          <template is="dom-if" if="{{!done.length}}">
+            <paper-material>
+              <paper-item>Completed tasks will appear here!</paper-item>
+            </paper-material>
+          </template>
+          <template id="done" is="dom-repeat" items="{{done}}">
+            <paper-item>{{item.task}}<i style="margin-left: 5px;">{{item.user}}</i></paper-item>
+          </template>
+        </paper-menu>
+        <!-- End side bar content -->
+        <!-- End drawer -->
+      </paper-header-panel>
+    
+      <!-- Begin main -->
+      <paper-scroll-header-panel main condenses keep-condensed-header>
+        <paper-toolbar class="tall">
+          <paper-icon-button icon="menu" paper-drawer-toggle></paper-icon-button>
+          <div class="flex"></div>
+          <div class="bottom title">Polymer Todo App</div>
+        </paper-toolbar>
+        <!-- Begin main body content -->
+        <div class="content">
+          <!-- Add todo item -->
+          <paper-material id="todoEntry">
+            <paper-input id="tTask" label="Task" char-counter required auto-validate error-message="Cannot be empty" error-message="letters only!"></paper-input>
+              <paper-input id="tUser" required auto-validate error-message="Cannot be empty" error-message="letters only!" label="Username" maxlength="20" required></paper-input>
+              <paper-fab icon="add" mini on-tap="postTask"></paper-fab>
+          </paper-material>
+          <!-- End add todo item -->
+          <!-- Iterate through and show todos -->
+          <div id="todos">
+            <template is="dom-if" if="{{!todo.length}}">
+              <paper-material>
+                <paper-item>No Tasks remain. Updates are Real-Time so stay tuned!</paper-item>
+              </paper-material>
+            </template>
+            <template id="tasks" is="dom-repeat" items="{{todo}}">
+              <todo-element user="{{item.user}}" task="{{item.task}}" rid="{{item.rid}}"></todo-element>
+            </template>
+          </div>
+            <!-- End iterate through and show todos -->
+        </div>
+          <!-- End main body content -->
+      </paper-scroll-header-panel>
+    </paper-drawer-panel> 
+  
+    <script>
+      // custom transformation: scale header's title
+      var title = document.querySelector('.title');
+      addEventListener('paper-header-transform', function(e) {
+        var d = e.detail;
+        var m = d.height - d.condensedHeight;
+        var scale = Math.max(0.75, (m - d.y) / (m / 0.25)  + 0.75);
+        Polymer.Base.transform('scale(' + scale + ') translateZ(0)', title);
+      });
+    </script>
+
+  </template>
+
+</dom-module>
+
+<script>
+  Polymer({
+    is: 'todo-app',
+    ready: function(e){
+        this.addEventListener('complete', this.handleComplete);
+    },
+    // element public API
+    properties: {
+        todo: {
+            type: Array,
+            value: [
+                      {user: "Dom", task: "Learn Polymer", rid: 0},
+                      {user: "Dom", task: "Redo crappy tutorial template", rid: 1},
+                      {user: "Dom", task: "Make it functional", rid: 2},
+                      {user: "Dom", task: "Implement with Angular 2.0", rid: 3},
+                      {user: "Dom", task: "Bring in Python REST API", rid: 4}
+                    ]
+        },
+        done: {
+            type:Array,
+            value: [{user: "Dom Farolino", task: "Redesign terrible tutorial app", rid: 2}, {user: "Dom Farolino", task: 
+            "Add another element to todo", rid: 3}]
+        }
+    },
+    postTask: function(e) {  // Add a new task
+        var tsk = this.$.tTask.value;
+        var usr = this.$.tUser.value;
+        if (tsk==""){
+            //alert("Task is Empty!");
+            return;
+        }
+        if (usr==""){ 
+            usr = "Anonymous";
+        }
+        this.$.tTask.value = "";
+        console.log("Posting task");
+        // Need to post task
+    },
+    handleComplete: function(e){
+        console.log("handleComplete");
+        var idx = findWithAttr(this.todo, 'rid', e.target.rid);
+        var itm = this.todo[idx];
+        itm.task = e.target.task;       //Task of the fired event
+        itm.user = this.$.tUser.value; //User who completed task
+        itm.type = "done";              //Change to completed
+        // Need to complete task
+    }
+  });
+    
+    function randID() {
+      return Math.floor(Math.random()*10000);
+    }
+
+    function findWithAttr(array, attr, value) { //Finds object index in array by its random ID
+      for(var i = 0; i < array.length; i += 1) {
+        if(array[i][attr] === value) {
+          return i;
+        }
+      }
+    }
+</script>
